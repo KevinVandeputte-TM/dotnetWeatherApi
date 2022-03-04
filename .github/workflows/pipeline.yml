@@ -17,3 +17,8 @@ jobs:
       run: dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true
     - name: Build for Linux
       run: dotnet publish -r linux-x64 --configuration ReleaseComplete
+    - name: Upload artifact - Windows
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: WeatherApiZIP
+        path: dotnetWeatherApi/bin/Release/net5.0/win-x64/publish/dotnetWeatherApi.exe
