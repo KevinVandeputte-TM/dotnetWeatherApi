@@ -15,6 +15,8 @@ jobs:
         dotnet-version: 5.0.x
     - name: Build for Windows
       run: dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true
+    - name: Show contents of the current directory
+      run: ls -lR
     - name: Build for Linux
       run: dotnet publish -r linux-x64 --configuration ReleaseComplete
     - name: Upload artifact - Windows
@@ -22,3 +24,9 @@ jobs:
       with:
         name: WeatherApiZIP
         path: bin/Release/net5.0/win-x64/publish/dotnetWeatherApi.exe
+    - name: Docker login
+      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+    - name: Docker Build
+      run: docker build -t ${{ secrets.DOCKER_USER }}/dotnetWeatherApi:latest .
+    - name: Upload container to Docker Hub with Push
+      run: docker push ${{ secrets.DOCKER_USER }}/dotnetWeatherApi:latest
